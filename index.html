@@ -89,6 +89,10 @@
     text-align: center;
     margin-top: 10px;
   }
+
+  iframe#postFrame {
+    width: 0; height: 0; border: 0; position: absolute; left: -9999px; top: -9999px;
+  }
 </style>
 </head>
 
@@ -130,6 +134,9 @@
 
   <div id="statusBox" class="status"></div>
 
+  <!-- Hidden iframe so POST works inside embedded webviews -->
+  <iframe id="postFrame" name="postFrame"></iframe>
+
   <form id="glowForm">
     <label>Parent / Guardian Name</label>
     <input type="text" id="parentName" required>
@@ -160,10 +167,10 @@
     <button type="submit" class="submit-btn" id="submitBtn">Submit Registration</button>
 
     <div class="small">
-      If the app blocks the submit button, use the backup option below.
+      If anything fails, use the backup email button below.
     </div>
 
-    <button type="button" class="fallback-btn" id="fallbackBtn" style="display:none;">
+    <button type="button" class="fallback-btn" id="fallbackBtn">
       Backup: Send Registration by Email
     </button>
   </form>
@@ -171,34 +178,20 @@
   <footer>Versailles United Methodist Church • VUMC Kids</footer>
 </div>
 
-<!-- EmailJS -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
 <script>
-  // EmailJS keys (yours)
-  const EMAILJS_PUBLIC_KEY = "WLPAgp8AV2otpmCqy";
-  const EMAILJS_SERVICE_ID = "service_o5t9bw";
-  const EMAILJS_TEMPLATE_ID = "template_ncy5k3y";
+  // ✅ Your Apps Script Web App URL (already inserted)
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwugoY6eXs66Ii2tyaYNkjD35lJbnWhLvA-c26kN4_ugMtzWoPPgbjFiNERJ3k70Y8i/exec";
 
   const statusBox = document.getElementById("statusBox");
   const submitBtn = document.getElementById("submitBtn");
   const addChildBtn = document.getElementById("addChildBtn");
   const fallbackBtn = document.getElementById("fallbackBtn");
+  const postFrame = document.getElementById("postFrame");
   const form = document.getElementById("glowForm");
 
   function setStatus(type, msg) {
     statusBox.className = "status " + type;
     statusBox.textContent = msg;
-  }
-
-  function buildKidsList() {
-    let kids = "";
-    document.querySelectorAll(".child").forEach((child) => {
-      const name = child.querySelector(".childName")?.value?.trim();
-      const age = child.querySelector(".childAge")?.value?.trim();
-      kids += `• ${name} (Age ${age})\n`;
-    });
-    return kids.trim();
   }
 
   function addChild() {
@@ -220,11 +213,23 @@
 
   addChildBtn.addEventListener("click", addChild);
 
-  // Backup email (mailto) generator
+  function buildChildrenArray() {
+    const arr = [];
+    document.querySelectorAll(".child").forEach((child) => {
+      arr.push({
+        name: (child.querySelector(".childName")?.value || "").trim(),
+        age: (child.querySelector(".childAge")?.value || "").trim()
+      });
+    });
+    return arr;
+  }
+
   function openMailtoBackup() {
     const parentName = document.getElementById("parentName").value.trim();
     const parentPhone = document.getElementById("parentPhone").value.trim();
-    const kids = buildKidsList();
+    const kids = buildChildrenArray()
+      .map(c => `• ${c.name} (Age ${c.age})`)
+      .join("\n");
     const notes = document.getElementById("notes").value.trim();
 
     const subject = encodeURIComponent(`Glow Night Registration – ${parentName || "Parent"}`);
@@ -254,62 +259,58 @@ ${notes}
 
   fallbackBtn.addEventListener("click", openMailtoBackup);
 
-  // Init EmailJS (may fail in embedded webviews)
-  let emailjsReady = false;
-  try {
-    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-    emailjsReady = true;
-  } catch (e) {
-    emailjsReady = false;
-  }
-
-  // If EmailJS didn’t load/initialize, show backup button immediately
-  // Also show backup if the library is missing (blocked by embed)
-  setTimeout(() => {
-    if (!emailjsReady || typeof emailjs === "undefined") {
-      fallbackBtn.style.display = "block";
-      setStatus("error", "Email submit may be blocked inside the app.\nUse the Backup Email button below.");
-    }
-  }, 600);
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    // If emailjs is blocked, show backup option
-    if (typeof emailjs === "undefined" || !emailjsReady) {
-      fallbackBtn.style.display = "block";
-      setStatus("error", "Email submit is blocked inside the app.\nUse the Backup Email button below.");
-      return;
-    }
-
-    const payload = {
-      parent_name: document.getElementById("parentName").value.trim(),
-      parent_phone: document.getElementById("parentPhone").value.trim(),
-      children: buildKidsList(),
-      notes: document.getElementById("notes").value.trim()
-    };
-
-    submitBtn.disabled = true;
-    addChildBtn.disabled = true;
-    setStatus("sending", "Sending registration…");
-
-    try {
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, payload);
+  // Treat iframe load after POST as success
+  postFrame.addEventListener("load", () => {
+    if (submitBtn.disabled) {
       setStatus("success", "✅ Thank you! Your Glow Night registration has been submitted.");
       form.reset();
-
-      // Reset to one child block
       document.getElementById("children").innerHTML = "";
       addChild();
-
-    } catch (err) {
-      fallbackBtn.style.display = "block";
-      setStatus("error", "❌ Submission failed inside the app.\nUse the Backup Email button below.");
-      console.error(err);
-    } finally {
       submitBtn.disabled = false;
       addChildBtn.disabled = false;
     }
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    setStatus("sending", "Sending registration…");
+    submitBtn.disabled = true;
+    addChildBtn.disabled = true;
+
+    // POST to Apps Script via a real form submission targeting hidden iframe
+    const postForm = document.createElement("form");
+    postForm.method = "POST";
+    postForm.action = WEB_APP_URL;
+    postForm.target = "postFrame";
+
+    const fields = {
+      parentName: document.getElementById("parentName").value.trim(),
+      parentPhone: document.getElementById("parentPhone").value.trim(),
+      notes: document.getElementById("notes").value.trim(),
+      childrenJson: JSON.stringify(buildChildrenArray())
+    };
+
+    Object.keys(fields).forEach((k) => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = k;
+      input.value = fields[k];
+      postForm.appendChild(input);
+    });
+
+    document.body.appendChild(postForm);
+    postForm.submit();
+    postForm.remove();
+
+    // If iframe never loads (rare), re-enable and show backup
+    setTimeout(() => {
+      if (submitBtn.disabled) {
+        submitBtn.disabled = false;
+        addChildBtn.disabled = false;
+        setStatus("error", "❌ Submission may be blocked. Please use the Backup Email button below.");
+      }
+    }, 10000);
   });
 </script>
 
