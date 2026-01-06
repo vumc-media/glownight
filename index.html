@@ -22,6 +22,7 @@
     box-shadow: 0 0 20px rgba(0,0,0,.6);
   }
   h1,h2,h3 { text-align:center; margin: 8px 0; }
+
   .event-details {
     background: #1e275a;
     padding: 18px;
@@ -29,6 +30,7 @@
     margin: 20px 0;
     text-align: center;
   }
+
   .expect {
     background: #1b2252;
     padding: 15px;
@@ -59,6 +61,7 @@
     border:none;
     font-size:16px;
   }
+
   .child {
     background:#222d6b;
     padding:12px;
@@ -83,15 +86,9 @@
   button:disabled { opacity: 0.6; cursor: not-allowed; }
   footer { text-align:center; margin-top:25px; font-size:14px; opacity:0.85; }
 
-  .small {
-    font-size: 13px;
-    opacity: 0.85;
-    text-align: center;
-    margin-top: 10px;
-  }
-
   iframe#postFrame {
-    width: 0; height: 0; border: 0; position: absolute; left: -9999px; top: -9999px;
+    width:0; height:0; border:0;
+    position:absolute; left:-9999px; top:-9999px;
   }
 </style>
 </head>
@@ -134,15 +131,19 @@
 
   <div id="statusBox" class="status"></div>
 
-  <!-- Hidden iframe so POST works inside embedded webviews -->
   <iframe id="postFrame" name="postFrame"></iframe>
 
   <form id="glowForm">
+
     <label>Parent / Guardian Name</label>
     <input type="text" id="parentName" required>
 
     <label>Parent Mobile Number</label>
-    <input type="tel" id="parentPhone" required>
+    <input type="tel"
+           id="parentPhone"
+           inputmode="numeric"
+           placeholder="(555) 123-4567"
+           required>
 
     <div id="children">
       <div class="child">
@@ -162,25 +163,25 @@
     <button type="button" class="add-btn" id="addChildBtn">➕ Add Another Child</button>
 
     <label>Allergies / Special Notes</label>
-    <textarea id="notes" rows="4" placeholder="Food allergies, medical notes, or other important information"></textarea>
+    <textarea id="notes" rows="4"
+      placeholder="Food allergies, medical notes, or other important information"></textarea>
 
-    <button type="submit" class="submit-btn" id="submitBtn">Submit Registration</button>
-
-    <div class="small">
-      If anything fails, use the backup email button below.
-    </div>
+    <button type="submit" class="submit-btn" id="submitBtn">
+      Submit Registration
+    </button>
 
     <button type="button" class="fallback-btn" id="fallbackBtn">
       Backup: Send Registration by Email
     </button>
+
   </form>
 
   <footer>Versailles United Methodist Church • VUMC Kids</footer>
 </div>
 
 <script>
-  // ✅ Your Apps Script Web App URL (already inserted)
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwugoY6eXs66Ii2tyaYNkjD35lJbnWhLvA-c26kN4_ugMtzWoPPgbjFiNERJ3k70Y8i/exec";
+  const WEB_APP_URL =
+    "https://script.google.com/macros/s/AKfycbwugoY6eXs66Ii2tyaYNkjD35lJbnWhLvA-c26kN4_ugMtzWoPPgbjFiNERJ3k70Y8i/exec";
 
   const statusBox = document.getElementById("statusBox");
   const submitBtn = document.getElementById("submitBtn");
@@ -188,11 +189,24 @@
   const fallbackBtn = document.getElementById("fallbackBtn");
   const postFrame = document.getElementById("postFrame");
   const form = document.getElementById("glowForm");
+  const phoneInput = document.getElementById("parentPhone");
 
   function setStatus(type, msg) {
     statusBox.className = "status " + type;
     statusBox.textContent = msg;
   }
+
+  // 🔢 Auto-format phone number (XXX) XXX-XXXX
+  phoneInput.addEventListener("input", (e) => {
+    let digits = e.target.value.replace(/\D/g, "").substring(0, 10);
+    let formatted = "";
+
+    if (digits.length > 0) formatted = "(" + digits.substring(0, 3);
+    if (digits.length >= 4) formatted += ") " + digits.substring(3, 6);
+    if (digits.length >= 7) formatted += "-" + digits.substring(6, 10);
+
+    e.target.value = formatted;
+  });
 
   function addChild() {
     const div = document.createElement("div");
@@ -217,49 +231,22 @@
     const arr = [];
     document.querySelectorAll(".child").forEach((child) => {
       arr.push({
-        name: (child.querySelector(".childName")?.value || "").trim(),
-        age: (child.querySelector(".childAge")?.value || "").trim()
+        name: child.querySelector(".childName").value.trim(),
+        age: child.querySelector(".childAge").value.trim()
       });
     });
     return arr;
   }
 
   function openMailtoBackup() {
-    const parentName = document.getElementById("parentName").value.trim();
-    const parentPhone = document.getElementById("parentPhone").value.trim();
-    const kids = buildChildrenArray()
-      .map(c => `• ${c.name} (Age ${c.age})`)
-      .join("\n");
-    const notes = document.getElementById("notes").value.trim();
-
-    const subject = encodeURIComponent(`Glow Night Registration – ${parentName || "Parent"}`);
-    const body = encodeURIComponent(
-`VUMC Kids – Glow Night Registration
-
-Event:
-Glow Night of Fellowship
-Evening of the 25th | Begins at 5:00 PM
-Versailles United Methodist Church
-230 Paynes Mill Road
-
-Parent / Guardian:
-Name: ${parentName}
-Mobile: ${parentPhone}
-
-Children Registered:
-${kids}
-
-Allergies / Special Notes:
-${notes}
-`
-    );
-
-    window.location.href = `mailto:versaillesumckids@gmail.com?subject=${subject}&body=${body}`;
+    const subject = encodeURIComponent("Glow Night Registration");
+    const body = encodeURIComponent("Please complete registration on the website.");
+    window.location.href =
+      `mailto:versaillesumckids@gmail.com?subject=${subject}&body=${body}`;
   }
 
   fallbackBtn.addEventListener("click", openMailtoBackup);
 
-  // Treat iframe load after POST as success
   postFrame.addEventListener("load", () => {
     if (submitBtn.disabled) {
       setStatus("success", "✅ Thank you! Your Glow Night registration has been submitted.");
@@ -278,16 +265,15 @@ ${notes}
     submitBtn.disabled = true;
     addChildBtn.disabled = true;
 
-    // POST to Apps Script via a real form submission targeting hidden iframe
     const postForm = document.createElement("form");
     postForm.method = "POST";
     postForm.action = WEB_APP_URL;
     postForm.target = "postFrame";
 
     const fields = {
-      parentName: document.getElementById("parentName").value.trim(),
-      parentPhone: document.getElementById("parentPhone").value.trim(),
-      notes: document.getElementById("notes").value.trim(),
+      parentName: parentName.value.trim(),
+      parentPhone: parentPhone.value.trim(),
+      notes: notes.value.trim(),
       childrenJson: JSON.stringify(buildChildrenArray())
     };
 
@@ -302,15 +288,6 @@ ${notes}
     document.body.appendChild(postForm);
     postForm.submit();
     postForm.remove();
-
-    // If iframe never loads (rare), re-enable and show backup
-    setTimeout(() => {
-      if (submitBtn.disabled) {
-        submitBtn.disabled = false;
-        addChildBtn.disabled = false;
-        setStatus("error", "❌ Submission may be blocked. Please use the Backup Email button below.");
-      }
-    }, 10000);
   });
 </script>
 
