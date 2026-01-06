@@ -34,7 +34,9 @@ h1,h2,h3 { text-align: center; }
   border-radius: 10px;
   margin: 20px 0;
 }
+.expect li { margin: 6px 0; }
 .highlight { color: #ffcc00; font-weight: bold; }
+
 label { display:block; margin-top:14px; font-weight:bold; }
 input, select, textarea {
   width:100%;
@@ -63,16 +65,19 @@ button {
 .add-btn { background:#00ffd5; color:#000; }
 .submit-btn { background:#ffcc00; color:#000; }
 .fallback-btn { background:#ffffff; color:#000; }
+
 .status {
   display:none;
   margin-top:15px;
   padding:12px;
   border-radius:10px;
   font-weight:bold;
+  white-space: pre-wrap;
 }
 .status.sending { display:block; background:#0b3b5a; }
 .status.success { display:block; background:#0a4d2a; }
 .status.error { display:block; background:#5a0b0b; }
+
 footer { text-align:center; margin-top:25px; font-size:14px; opacity:0.85; }
 </style>
 </head>
@@ -109,34 +114,34 @@ footer { text-align:center; margin-top:25px; font-size:14px; opacity:0.85; }
 
 <form id="glowForm">
 
-<label>Parent / Guardian Name</label>
-<input type="text" id="parentName" required>
+  <label>Parent / Guardian Name</label>
+  <input type="text" id="parentName" required>
 
-<label>Parent Mobile Number</label>
-<input type="tel" id="parentPhone" inputmode="numeric" placeholder="(555) 123-4567" required>
+  <label>Parent Mobile Number</label>
+  <input type="tel" id="parentPhone" inputmode="numeric" placeholder="(555) 123-4567" required>
 
-<div id="children">
-  <div class="child">
-    <label>Child Name</label>
-    <input type="text" class="childName" required>
+  <div id="children">
+    <div class="child">
+      <label>Child Name</label>
+      <input type="text" class="childName" required>
 
-    <label>Child Age</label>
-    <select class="childAge" required>
-      <option value="">Select Age</option>
-      <option>3</option><option>4</option><option>5</option>
-      <option>6</option><option>7</option><option>8</option>
-      <option>9</option><option>10</option><option>11</option><option>12</option>
-    </select>
+      <label>Child Age</label>
+      <select class="childAge" required>
+        <option value="">Select Age</option>
+        <option>3</option><option>4</option><option>5</option>
+        <option>6</option><option>7</option><option>8</option>
+        <option>9</option><option>10</option><option>11</option><option>12</option>
+      </select>
+    </div>
   </div>
-</div>
 
-<button type="button" class="add-btn" id="addChildBtn">➕ Add Another Child</button>
+  <button type="button" class="add-btn" id="addChildBtn">➕ Add Another Child</button>
 
-<label>Allergies / Special Notes</label>
-<textarea id="notes" rows="4"></textarea>
+  <label>Allergies / Special Notes</label>
+  <textarea id="notes" rows="4"></textarea>
 
-<button type="submit" class="submit-btn" id="submitBtn">Submit Registration</button>
-<button type="button" class="fallback-btn" id="fallbackBtn">Backup: Email Registration</button>
+  <button type="submit" class="submit-btn" id="submitBtn">Submit Registration</button>
+  <button type="button" class="fallback-btn" id="fallbackBtn">Backup: Email Registration</button>
 
 </form>
 
@@ -144,90 +149,128 @@ footer { text-align:center; margin-top:25px; font-size:14px; opacity:0.85; }
 </div>
 
 <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwugoY6eXs66Ii2tyaYNkjD35lJbnWhLvA-c26kN4_ugMtzWoPPgbjFiNERJ3k70Y8i/exec";
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwugoY6eXs66Ii2tyaYNkjD35lJbnWhLvA-c26kN4_ugMtzWoPPgbjFiNERJ3k70Y8i/exec";
 
-const form = document.getElementById("glowForm");
-const statusBox = document.getElementById("statusBox");
-const submitBtn = document.getElementById("submitBtn");
-const addChildBtn = document.getElementById("addChildBtn");
-const fallbackBtn = document.getElementById("fallbackBtn");
-const phoneInput = document.getElementById("parentPhone");
+  const form = document.getElementById("glowForm");
+  const statusBox = document.getElementById("statusBox");
+  const submitBtn = document.getElementById("submitBtn");
+  const addChildBtn = document.getElementById("addChildBtn");
+  const fallbackBtn = document.getElementById("fallbackBtn");
+  const phoneInput = document.getElementById("parentPhone");
 
-function setStatus(type, msg) {
-  statusBox.className = "status " + type;
-  statusBox.textContent = msg;
-}
-
-phoneInput.addEventListener("input", e => {
-  let d = e.target.value.replace(/\D/g,"").substring(0,10);
-  let f = "";
-  if (d.length > 0) f = "(" + d.substring(0,3);
-  if (d.length >= 4) f += ") " + d.substring(3,6);
-  if (d.length >= 7) f += "-" + d.substring(6,10);
-  e.target.value = f;
-});
-
-function addChild() {
-  const div = document.createElement("div");
-  div.className = "child";
-  div.innerHTML = `
-    <label>Child Name</label>
-    <input type="text" class="childName" required>
-    <label>Child Age</label>
-    <select class="childAge" required>
-      <option value="">Select Age</option>
-      <option>3</option><option>4</option><option>5</option>
-      <option>6</option><option>7</option><option>8</option>
-      <option>9</option><option>10</option><option>11</option><option>12</option>
-    </select>`;
-  document.getElementById("children").appendChild(div);
-}
-addChildBtn.onclick = addChild;
-
-function buildChildren() {
-  return [...document.querySelectorAll(".child")].map(c => ({
-    name: c.querySelector(".childName").value.trim(),
-    age: c.querySelector(".childAge").value.trim()
-  }));
-}
-
-fallbackBtn.onclick = () => {
-  window.location.href = "mailto:versaillesumckids@gmail.com?subject=Glow Night Registration";
-};
-
-form.addEventListener("submit", async e => {
-  e.preventDefault();
-  setStatus("sending", "Sending registration…");
-  submitBtn.disabled = true;
-
-  try {
-    const payload = new URLSearchParams({
-      parentName: parentName.value.trim(),
-      parentPhone: parentPhone.value.trim(),
-      notes: notes.value.trim(),
-      childrenJson: JSON.stringify(buildChildren())
-    });
-
-    const res = await fetch(WEB_APP_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: payload.toString()
-    });
-
-    const data = await res.json();
-    if (!data.ok) throw new Error();
-
-    setStatus("success", "✅ Thank you! Your registration has been received.");
-    form.reset();
-    document.getElementById("children").innerHTML = "";
-    addChild();
-
-  } catch {
-    setStatus("error", "❌ Submission failed. Please try again or use backup email.");
-  } finally {
-    submitBtn.disabled = false;
+  function setStatus(type, msg) {
+    statusBox.className = "status " + type;
+    statusBox.textContent = msg;
   }
-});
+
+  // Auto-format phone number (XXX) XXX-XXXX
+  phoneInput.addEventListener("input", (e) => {
+    let d = e.target.value.replace(/\D/g, "").substring(0, 10);
+    let f = "";
+    if (d.length > 0) f = "(" + d.substring(0, 3);
+    if (d.length >= 4) f += ") " + d.substring(3, 6);
+    if (d.length >= 7) f += "-" + d.substring(6, 10);
+    e.target.value = f;
+  });
+
+  function addChild() {
+    const div = document.createElement("div");
+    div.className = "child";
+    div.innerHTML = `
+      <label>Child Name</label>
+      <input type="text" class="childName" required>
+      <label>Child Age</label>
+      <select class="childAge" required>
+        <option value="">Select Age</option>
+        <option>3</option><option>4</option><option>5</option>
+        <option>6</option><option>7</option><option>8</option>
+        <option>9</option><option>10</option><option>11</option><option>12</option>
+      </select>`;
+    document.getElementById("children").appendChild(div);
+  }
+  addChildBtn.onclick = addChild;
+
+  function buildChildren() {
+    return [...document.querySelectorAll(".child")].map(c => ({
+      name: c.querySelector(".childName").value.trim(),
+      age: c.querySelector(".childAge").value.trim()
+    }));
+  }
+
+  // Better backup email (includes the entered info)
+  fallbackBtn.onclick = () => {
+    const parentName = document.getElementById("parentName").value.trim();
+    const parentPhone = document.getElementById("parentPhone").value.trim();
+    const notes = document.getElementById("notes").value.trim();
+    const kids = buildChildren().map(k => `• ${k.name} (Age ${k.age})`).join("\n");
+
+    const subject = encodeURIComponent(`Glow Night Registration – ${parentName || "Parent"}`);
+    const body = encodeURIComponent(
+`Parent/Guardian: ${parentName}
+Mobile: ${parentPhone}
+
+Children:
+${kids}
+
+Allergies/Notes:
+${notes}
+`
+    );
+
+    window.location.href = `mailto:versaillesumckids@gmail.com?subject=${subject}&body=${body}`;
+  };
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    setStatus("sending", "Sending registration…");
+    submitBtn.disabled = true;
+    addChildBtn.disabled = true;
+    fallbackBtn.disabled = true;
+
+    try {
+      const payload = new URLSearchParams({
+        parentName: document.getElementById("parentName").value.trim(),
+        parentPhone: document.getElementById("parentPhone").value.trim(),
+        notes: document.getElementById("notes").value.trim(),
+        childrenJson: JSON.stringify(buildChildren()),
+        _ts: String(Date.now()) // cache-buster
+      });
+
+      const res = await fetch(WEB_APP_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+        body: payload.toString(),
+        cache: "no-store"
+      });
+
+      const text = await res.text();
+
+      // Try JSON parse; if it isn't JSON, show the first part (useful for debugging)
+      let data = null;
+      try { data = JSON.parse(text); } catch (_) {}
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${text.slice(0, 200)}`);
+      }
+      if (!data || data.ok !== true) {
+        throw new Error(data?.error || text.slice(0, 200) || "Unknown response");
+      }
+
+      setStatus("success", "✅ Thank you! Your registration has been received.");
+      form.reset();
+      document.getElementById("children").innerHTML = "";
+      addChild();
+
+    } catch (err) {
+      console.error(err);
+      setStatus("error", "❌ Submission failed.\n\nDetails:\n" + (err?.message || String(err)) + "\n\nUse the Backup Email button if needed.");
+    } finally {
+      submitBtn.disabled = false;
+      addChildBtn.disabled = false;
+      fallbackBtn.disabled = false;
+    }
+  });
 </script>
 
 </body>
