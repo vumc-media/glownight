@@ -2,123 +2,149 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>VUMC Kids Glow Night Registration</title>
+<title>VUMC Kids – Glow Night Registration</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body {
   font-family: Arial, sans-serif;
-  background: #0b0b1a;
+  background: radial-gradient(circle at top, #1b1b3a, #000);
   color: #fff;
   padding: 20px;
 }
+
 .container {
-  max-width: 700px;
+  max-width: 720px;
   margin: auto;
-  background: #14143a;
-  padding: 20px;
-  border-radius: 10px;
+  background: #11183a;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,.6);
 }
+
 h1, h2 {
   text-align: center;
+  margin-bottom: 10px;
 }
+
 .event-details {
-  background: #1f1f55;
+  background: #1e275a;
   padding: 15px;
-  border-radius: 8px;
-  margin-bottom: 20px;
+  border-radius: 10px;
+  margin: 20px 0;
+  text-align: center;
 }
+
 label {
   display: block;
-  margin-top: 12px;
+  margin-top: 14px;
+  font-weight: bold;
 }
-input, select, textarea, button {
+
+input, select, textarea {
   width: 100%;
   padding: 10px;
-  margin-top: 5px;
-  border-radius: 5px;
+  margin-top: 6px;
+  border-radius: 6px;
   border: none;
+  font-size: 16px;
 }
+
 .child {
-  background: #22225f;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 5px;
+  background: #222d6b;
+  padding: 12px;
+  margin-top: 12px;
+  border-radius: 8px;
 }
+
 button {
-  background: #ffcc00;
-  color: #000;
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
   font-weight: bold;
   cursor: pointer;
 }
+
 .add-btn {
-  background: #00ffcc;
-  margin-top: 10px;
+  background: #00ffd5;
+  color: #000;
 }
+
 .submit-btn {
-  margin-top: 20px;
+  background: #ffcc00;
+  color: #000;
 }
+
 footer {
   text-align: center;
-  font-size: 0.9em;
   margin-top: 20px;
+  font-size: 14px;
+  opacity: 0.8;
 }
 </style>
 </head>
 
 <body>
 <div class="container">
-  <h1>✨ VUMC Kids ✨</h1>
-  <h2>Glow Night Registration</h2>
 
-  <div class="event-details">
-    <strong>Glow Night of Fellowship</strong><br>
-    📅 Evening of the 25th<br>
-    ⏰ Begins at 5:00 PM<br>
-    📍 Versailles United Methodist Church<br>
-    230 Paynes Mill Road<br><br>
-    <em>Wear bright colors or white to glow!</em>
-  </div>
+<h1>✨ VUMC Kids ✨</h1>
+<h2>Glow Night Registration</h2>
 
-  <form id="glowForm">
-    <label>Parent / Guardian Name</label>
-    <input type="text" id="parentName" required>
-
-    <label>Parent Mobile Number</label>
-    <input type="tel" id="parentPhone" required>
-
-    <div id="children">
-      <div class="child">
-        <label>Child Name</label>
-        <input type="text" class="childName" required>
-
-        <label>Child Age</label>
-        <select class="childAge" required>
-          <option value="">Select Age</option>
-          <option>3</option><option>4</option><option>5</option>
-          <option>6</option><option>7</option><option>8</option>
-          <option>9</option><option>10</option><option>11</option><option>12</option>
-        </select>
-      </div>
-    </div>
-
-    <button type="button" class="add-btn" onclick="addChild()">➕ Add Another Child</button>
-
-    <label>Allergies / Special Notes</label>
-    <textarea id="notes" rows="4"></textarea>
-
-    <button type="submit" class="submit-btn">Submit Registration</button>
-  </form>
-
-  <footer>
-    Versailles United Methodist Church – VUMC Kids
-  </footer>
+<div class="event-details">
+  <strong>Glow Night of Fellowship</strong><br><br>
+  🗓 Evening of the 25th<br>
+  ⏰ Begins at 5:00 PM<br>
+  📍 Versailles United Methodist Church<br>
+  230 Paynes Mill Road<br><br>
+  <em>Wear bright colors or white to glow!</em>
 </div>
 
+<form id="glowForm">
+
+<label>Parent / Guardian Name</label>
+<input type="text" id="parentName" required>
+
+<label>Parent Mobile Number</label>
+<input type="tel" id="parentPhone" required>
+
+<div id="children">
+  <div class="child">
+    <label>Child Name</label>
+    <input type="text" class="childName" required>
+
+    <label>Child Age</label>
+    <select class="childAge" required>
+      <option value="">Select Age</option>
+      <option>3</option><option>4</option><option>5</option>
+      <option>6</option><option>7</option><option>8</option>
+      <option>9</option><option>10</option><option>11</option><option>12</option>
+    </select>
+  </div>
+</div>
+
+<button type="button" class="add-btn" onclick="addChild()">➕ Add Another Child</button>
+
+<label>Allergies / Special Notes</label>
+<textarea id="notes" rows="4" placeholder="Food allergies, medical notes, or other important info"></textarea>
+
+<button type="submit" class="submit-btn">Submit Registration</button>
+
+</form>
+
+<footer>
+Versailles United Methodist Church • VUMC Kids
+</footer>
+
+</div>
+
+<!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
 <script>
-emailjs.init("YOUR_PUBLIC_KEY");
+emailjs.init("WLPAgp8AV2otpmCqy");
 
 function addChild() {
   const div = document.createElement("div");
@@ -142,17 +168,21 @@ document.getElementById("glowForm").addEventListener("submit", function(e) {
 
   let kids = "";
   document.querySelectorAll(".child").forEach((child, i) => {
-    kids += `Child ${i+1}: ${child.querySelector(".childName").value} (Age ${child.querySelector(".childAge").value})\n`;
+    kids += `• ${child.querySelector(".childName").value} (Age ${child.querySelector(".childAge").value})\n`;
   });
 
-  emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
-    parent_name: parentName.value,
-    parent_phone: parentPhone.value,
+  emailjs.send("service_o5t9bw", "template_ncy5k3y", {
+    parent_name: document.getElementById("parentName").value,
+    parent_phone: document.getElementById("parentPhone").value,
     children: kids,
-    notes: notes.value
+    notes: document.getElementById("notes").value
   }).then(() => {
-    alert("Registration submitted successfully!");
-    e.target.reset();
+    alert("Thank you! Your Glow Night registration has been submitted.");
+    document.getElementById("glowForm").reset();
+    document.getElementById("children").innerHTML = document.querySelector(".child").outerHTML;
+  }).catch(error => {
+    alert("Something went wrong. Please try again.");
+    console.error(error);
   });
 });
 </script>
