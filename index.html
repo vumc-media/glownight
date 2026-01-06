@@ -1,294 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VUMC Kids – Glow Night Registration</title>
 
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: radial-gradient(circle at top, #1b1b3a, #000);
-    color: #fff;
-    padding: 20px;
-    margin: 0;
-  }
-  .container {
-    max-width: 760px;
-    margin: auto;
-    background: #11183a;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,0,0,.6);
-  }
-  h1,h2,h3 { text-align:center; margin: 8px 0; }
-
-  .event-details {
-    background: #1e275a;
-    padding: 18px;
-    border-radius: 10px;
-    margin: 20px 0;
-    text-align: center;
-  }
-
-  .expect {
-    background: #1b2252;
-    padding: 15px;
-    border-radius: 10px;
-    margin: 20px 0;
-  }
-  .expect li { margin: 6px 0; }
-  .highlight { color:#ffcc00; font-weight:bold; }
-
-  .status {
-    display:none;
-    margin: 15px 0 5px 0;
-    padding: 12px;
-    border-radius: 10px;
-    font-weight: bold;
-    white-space: pre-wrap;
-  }
-  .status.sending { display:block; background:#0b3b5a; }
-  .status.success { display:block; background:#0a4d2a; }
-  .status.error   { display:block; background:#5a0b0b; }
-
-  label { display:block; margin-top:14px; font-weight:bold; }
-  input, select, textarea {
-    width:100%;
-    padding:10px;
-    margin-top:6px;
-    border-radius:8px;
-    border:none;
-    font-size:16px;
-  }
-
-  .child {
-    background:#222d6b;
-    padding:12px;
-    margin-top:12px;
-    border-radius:10px;
-  }
-
-  button {
-    width:100%;
-    padding:12px;
-    margin-top:14px;
-    border:none;
-    border-radius:8px;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-  }
-  .add-btn { background:#00ffd5; color:#000; }
-  .submit-btn { background:#ffcc00; color:#000; }
-  .fallback-btn { background:#ffffff; color:#000; }
-
-  button:disabled { opacity: 0.6; cursor: not-allowed; }
-  footer { text-align:center; margin-top:25px; font-size:14px; opacity:0.85; }
-
-  iframe#postFrame {
-    width:0; height:0; border:0;
-    position:absolute; left:-9999px; top:-9999px;
-  }
+body {
+  font-family: Arial, sans-serif;
+  background: radial-gradient(circle at top, #1b1b3a, #000);
+  color: #fff;
+  margin: 0;
+  padding: 20px;
+}
+.container {
+  max-width: 760px;
+  margin: auto;
+  background: #11183a;
+  padding: 25px;
+  border-radius: 12px;
+}
+h1,h2,h3 { text-align: center; }
+.event-details {
+  background: #1e275a;
+  padding: 18px;
+  border-radius: 10px;
+  margin: 20px 0;
+  text-align: center;
+}
+.expect {
+  background: #1b2252;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 20px 0;
+}
+.highlight { color: #ffcc00; font-weight: bold; }
+label { display:block; margin-top:14px; font-weight:bold; }
+input, select, textarea {
+  width:100%;
+  padding:10px;
+  margin-top:6px;
+  border-radius:8px;
+  border:none;
+  font-size:16px;
+}
+.child {
+  background:#222d6b;
+  padding:12px;
+  margin-top:12px;
+  border-radius:10px;
+}
+button {
+  width:100%;
+  padding:12px;
+  margin-top:14px;
+  border:none;
+  border-radius:8px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.add-btn { background:#00ffd5; color:#000; }
+.submit-btn { background:#ffcc00; color:#000; }
+.fallback-btn { background:#ffffff; color:#000; }
+.status {
+  display:none;
+  margin-top:15px;
+  padding:12px;
+  border-radius:10px;
+  font-weight:bold;
+}
+.status.sending { display:block; background:#0b3b5a; }
+.status.success { display:block; background:#0a4d2a; }
+.status.error { display:block; background:#5a0b0b; }
+footer { text-align:center; margin-top:25px; font-size:14px; opacity:0.85; }
 </style>
 </head>
 
 <body>
 <div class="container">
 
-  <h1>✨ VUMC Kids ✨</h1>
-  <h2>Glow Night of Fellowship</h2>
-  <h3>🎉 Glow Party & Fellowship Night! 🎉</h3>
+<h1>✨ VUMC Kids ✨</h1>
+<h2>Glow Night of Fellowship</h2>
+<h3>🎉 Glow Party & Fellowship Night! 🎉</h3>
 
-  <div class="event-details">
-    Versailles United Methodist Church invites you to a<br><br>
-    <strong class="highlight">Glow Party & Fellowship Night!</strong><br><br>
-    as we celebrate together and welcome the new year!<br><br>
-    🗓 <strong>Evening of the 25th</strong><br>
-    ⏰ <strong>Begins at 5:00 PM</strong><br>
-    📍 <strong>Versailles United Methodist Church</strong><br>
-    230 Paynes Mill Road<br><br>
-    <span class="highlight">Wear bright colors or white to glow!</span>
+<div class="event-details">
+  <strong class="highlight">Glow Party & Fellowship Night!</strong><br><br>
+  🗓 Evening of the 25th<br>
+  ⏰ Begins at 5:00 PM<br>
+  📍 Versailles United Methodist Church<br>
+  230 Paynes Mill Road<br><br>
+  <span class="highlight">Wear bright colors or white to glow!</span>
+</div>
+
+<div class="expect">
+  <h3>What to Expect</h3>
+  <ul>
+    <li>✨ Glow lights & glowing fun</li>
+    <li>🤝 Fellowship & connection</li>
+    <li>🎶 Music, laughter & celebration</li>
+    <li>😊 A joyful night for our church family</li>
+  </ul>
+</div>
+
+<h2>Register Your Child</h2>
+
+<div id="statusBox" class="status"></div>
+
+<form id="glowForm">
+
+<label>Parent / Guardian Name</label>
+<input type="text" id="parentName" required>
+
+<label>Parent Mobile Number</label>
+<input type="tel" id="parentPhone" inputmode="numeric" placeholder="(555) 123-4567" required>
+
+<div id="children">
+  <div class="child">
+    <label>Child Name</label>
+    <input type="text" class="childName" required>
+
+    <label>Child Age</label>
+    <select class="childAge" required>
+      <option value="">Select Age</option>
+      <option>3</option><option>4</option><option>5</option>
+      <option>6</option><option>7</option><option>8</option>
+      <option>9</option><option>10</option><option>11</option><option>12</option>
+    </select>
   </div>
+</div>
 
-  <div class="expect">
-    <h3>What to Expect</h3>
-    <ul>
-      <li>✨ Glow lights & glowing fun</li>
-      <li>🤝 Fellowship & connection</li>
-      <li>🎶 Music, laughter & celebration</li>
-      <li>😊 A joyful night for our church family</li>
-    </ul>
-  </div>
+<button type="button" class="add-btn" id="addChildBtn">➕ Add Another Child</button>
 
-  <p style="text-align:center;">
-    <strong>All are welcome — bring a friend and come celebrate with us!</strong>
-  </p>
+<label>Allergies / Special Notes</label>
+<textarea id="notes" rows="4"></textarea>
 
-  <hr style="margin:30px 0; border-color:#333;">
+<button type="submit" class="submit-btn" id="submitBtn">Submit Registration</button>
+<button type="button" class="fallback-btn" id="fallbackBtn">Backup: Email Registration</button>
 
-  <h2>Register Your Child</h2>
+</form>
 
-  <div id="statusBox" class="status"></div>
-
-  <iframe id="postFrame" name="postFrame"></iframe>
-
-  <form id="glowForm">
-
-    <label>Parent / Guardian Name</label>
-    <input type="text" id="parentName" required>
-
-    <label>Parent Mobile Number</label>
-    <input type="tel"
-           id="parentPhone"
-           inputmode="numeric"
-           placeholder="(555) 123-4567"
-           required>
-
-    <div id="children">
-      <div class="child">
-        <label>Child Name</label>
-        <input type="text" class="childName" required>
-
-        <label>Child Age</label>
-        <select class="childAge" required>
-          <option value="">Select Age</option>
-          <option>3</option><option>4</option><option>5</option>
-          <option>6</option><option>7</option><option>8</option>
-          <option>9</option><option>10</option><option>11</option><option>12</option>
-        </select>
-      </div>
-    </div>
-
-    <button type="button" class="add-btn" id="addChildBtn">➕ Add Another Child</button>
-
-    <label>Allergies / Special Notes</label>
-    <textarea id="notes" rows="4"
-      placeholder="Food allergies, medical notes, or other important information"></textarea>
-
-    <button type="submit" class="submit-btn" id="submitBtn">
-      Submit Registration
-    </button>
-
-    <button type="button" class="fallback-btn" id="fallbackBtn">
-      Backup: Send Registration by Email
-    </button>
-
-  </form>
-
-  <footer>Versailles United Methodist Church • VUMC Kids</footer>
+<footer>Versailles United Methodist Church • VUMC Kids</footer>
 </div>
 
 <script>
-  const WEB_APP_URL =
-    "https://script.google.com/macros/s/AKfycbwugoY6eXs66Ii2tyaYNkjD35lJbnWhLvA-c26kN4_ugMtzWoPPgbjFiNERJ3k70Y8i/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwugoY6eXs66Ii2tyaYNkjD35lJbnWhLvA-c26kN4_ugMtzWoPPgbjFiNERJ3k70Y8i/exec";
 
-  const statusBox = document.getElementById("statusBox");
-  const submitBtn = document.getElementById("submitBtn");
-  const addChildBtn = document.getElementById("addChildBtn");
-  const fallbackBtn = document.getElementById("fallbackBtn");
-  const postFrame = document.getElementById("postFrame");
-  const form = document.getElementById("glowForm");
-  const phoneInput = document.getElementById("parentPhone");
+const form = document.getElementById("glowForm");
+const statusBox = document.getElementById("statusBox");
+const submitBtn = document.getElementById("submitBtn");
+const addChildBtn = document.getElementById("addChildBtn");
+const fallbackBtn = document.getElementById("fallbackBtn");
+const phoneInput = document.getElementById("parentPhone");
 
-  function setStatus(type, msg) {
-    statusBox.className = "status " + type;
-    statusBox.textContent = msg;
-  }
+function setStatus(type, msg) {
+  statusBox.className = "status " + type;
+  statusBox.textContent = msg;
+}
 
-  // 🔢 Auto-format phone number (XXX) XXX-XXXX
-  phoneInput.addEventListener("input", (e) => {
-    let digits = e.target.value.replace(/\D/g, "").substring(0, 10);
-    let formatted = "";
+phoneInput.addEventListener("input", e => {
+  let d = e.target.value.replace(/\D/g,"").substring(0,10);
+  let f = "";
+  if (d.length > 0) f = "(" + d.substring(0,3);
+  if (d.length >= 4) f += ") " + d.substring(3,6);
+  if (d.length >= 7) f += "-" + d.substring(6,10);
+  e.target.value = f;
+});
 
-    if (digits.length > 0) formatted = "(" + digits.substring(0, 3);
-    if (digits.length >= 4) formatted += ") " + digits.substring(3, 6);
-    if (digits.length >= 7) formatted += "-" + digits.substring(6, 10);
+function addChild() {
+  const div = document.createElement("div");
+  div.className = "child";
+  div.innerHTML = `
+    <label>Child Name</label>
+    <input type="text" class="childName" required>
+    <label>Child Age</label>
+    <select class="childAge" required>
+      <option value="">Select Age</option>
+      <option>3</option><option>4</option><option>5</option>
+      <option>6</option><option>7</option><option>8</option>
+      <option>9</option><option>10</option><option>11</option><option>12</option>
+    </select>`;
+  document.getElementById("children").appendChild(div);
+}
+addChildBtn.onclick = addChild;
 
-    e.target.value = formatted;
-  });
+function buildChildren() {
+  return [...document.querySelectorAll(".child")].map(c => ({
+    name: c.querySelector(".childName").value.trim(),
+    age: c.querySelector(".childAge").value.trim()
+  }));
+}
 
-  function addChild() {
-    const div = document.createElement("div");
-    div.className = "child";
-    div.innerHTML = `
-      <label>Child Name</label>
-      <input type="text" class="childName" required>
-      <label>Child Age</label>
-      <select class="childAge" required>
-        <option value="">Select Age</option>
-        <option>3</option><option>4</option><option>5</option>
-        <option>6</option><option>7</option><option>8</option>
-        <option>9</option><option>10</option><option>11</option><option>12</option>
-      </select>
-    `;
-    document.getElementById("children").appendChild(div);
-  }
+fallbackBtn.onclick = () => {
+  window.location.href = "mailto:versaillesumckids@gmail.com?subject=Glow Night Registration";
+};
 
-  addChildBtn.addEventListener("click", addChild);
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  setStatus("sending", "Sending registration…");
+  submitBtn.disabled = true;
 
-  function buildChildrenArray() {
-    const arr = [];
-    document.querySelectorAll(".child").forEach((child) => {
-      arr.push({
-        name: child.querySelector(".childName").value.trim(),
-        age: child.querySelector(".childAge").value.trim()
-      });
-    });
-    return arr;
-  }
-
-  function openMailtoBackup() {
-    const subject = encodeURIComponent("Glow Night Registration");
-    const body = encodeURIComponent("Please complete registration on the website.");
-    window.location.href =
-      `mailto:versaillesumckids@gmail.com?subject=${subject}&body=${body}`;
-  }
-
-  fallbackBtn.addEventListener("click", openMailtoBackup);
-
-  postFrame.addEventListener("load", () => {
-    if (submitBtn.disabled) {
-      setStatus("success", "✅ Thank you! Your Glow Night registration has been submitted.");
-      form.reset();
-      document.getElementById("children").innerHTML = "";
-      addChild();
-      submitBtn.disabled = false;
-      addChildBtn.disabled = false;
-    }
-  });
-
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    setStatus("sending", "Sending registration…");
-    submitBtn.disabled = true;
-    addChildBtn.disabled = true;
-
-    const postForm = document.createElement("form");
-    postForm.method = "POST";
-    postForm.action = WEB_APP_URL;
-    postForm.target = "postFrame";
-
-    const fields = {
+  try {
+    const payload = new URLSearchParams({
       parentName: parentName.value.trim(),
       parentPhone: parentPhone.value.trim(),
       notes: notes.value.trim(),
-      childrenJson: JSON.stringify(buildChildrenArray())
-    };
-
-    Object.keys(fields).forEach((k) => {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = k;
-      input.value = fields[k];
-      postForm.appendChild(input);
+      childrenJson: JSON.stringify(buildChildren())
     });
 
-    document.body.appendChild(postForm);
-    postForm.submit();
-    postForm.remove();
-  });
+    const res = await fetch(WEB_APP_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: payload.toString()
+    });
+
+    const data = await res.json();
+    if (!data.ok) throw new Error();
+
+    setStatus("success", "✅ Thank you! Your registration has been received.");
+    form.reset();
+    document.getElementById("children").innerHTML = "";
+    addChild();
+
+  } catch {
+    setStatus("error", "❌ Submission failed. Please try again or use backup email.");
+  } finally {
+    submitBtn.disabled = false;
+  }
+});
 </script>
 
 </body>
