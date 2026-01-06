@@ -14,7 +14,7 @@ body {
 }
 
 .container {
-  max-width: 720px;
+  max-width: 760px;
   margin: auto;
   background: #11183a;
   padding: 25px;
@@ -22,17 +22,37 @@ body {
   box-shadow: 0 0 20px rgba(0,0,0,.6);
 }
 
-h1, h2 {
+h1, h2, h3 {
   text-align: center;
   margin-bottom: 10px;
 }
 
 .event-details {
   background: #1e275a;
-  padding: 15px;
+  padding: 18px;
   border-radius: 10px;
   margin: 20px 0;
   text-align: center;
+}
+
+.expect {
+  background: #1b2252;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+.expect ul {
+  margin-top: 10px;
+}
+
+.expect li {
+  margin-bottom: 6px;
+}
+
+.highlight {
+  color: #ffcc00;
+  font-weight: bold;
 }
 
 label {
@@ -80,9 +100,9 @@ button {
 
 footer {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 25px;
   font-size: 14px;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 </style>
 </head>
@@ -91,16 +111,41 @@ footer {
 <div class="container">
 
 <h1>✨ VUMC Kids ✨</h1>
-<h2>Glow Night Registration</h2>
+<h2>Glow Night of Fellowship</h2>
+<h3>🎉 Glow Party & Fellowship Night! 🎉</h3>
 
 <div class="event-details">
-  <strong>Glow Night of Fellowship</strong><br><br>
-  🗓 Evening of the 25th<br>
-  ⏰ Begins at 5:00 PM<br>
-  📍 Versailles United Methodist Church<br>
+  Versailles United Methodist Church invites you to a<br><br>
+
+  <strong class="highlight">Glow Party & Fellowship Night!</strong><br><br>
+
+  as we celebrate together and welcome the new year!<br><br>
+
+  🗓 <strong>Evening of the 25th</strong><br>
+  ⏰ <strong>Begins at 5:00 PM</strong><br>
+  📍 <strong>Versailles United Methodist Church</strong><br>
   230 Paynes Mill Road<br><br>
-  <em>Wear bright colors or white to glow!</em>
+
+  <span class="highlight">Wear bright colors or white to glow!</span>
 </div>
+
+<div class="expect">
+  <h3>What to Expect</h3>
+  <ul>
+    <li>✨ Glow lights & glowing fun</li>
+    <li>🤝 Fellowship & connection</li>
+    <li>🎶 Music, laughter & celebration</li>
+    <li>😊 A joyful night for our church family</li>
+  </ul>
+</div>
+
+<p style="text-align:center;">
+  <strong>All are welcome — bring a friend and come celebrate with us!</strong>
+</p>
+
+<hr style="margin:30px 0; border-color:#333;">
+
+<h2>Register Your Child</h2>
 
 <form id="glowForm">
 
@@ -128,7 +173,7 @@ footer {
 <button type="button" class="add-btn" onclick="addChild()">➕ Add Another Child</button>
 
 <label>Allergies / Special Notes</label>
-<textarea id="notes" rows="4" placeholder="Food allergies, medical notes, or other important info"></textarea>
+<textarea id="notes" rows="4" placeholder="Food allergies, medical notes, or other important information"></textarea>
 
 <button type="submit" class="submit-btn">Submit Registration</button>
 
